@@ -1,0 +1,5 @@
+# System packages required on the Debian/Ubuntu VM before `poetry install`.
+# Install with: xargs -a apt_requirements.txt sudo apt-get install -y
+build-essential
+python3-dev
+libgomp1

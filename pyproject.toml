@@ -1,0 +1,50 @@
+[tool.poetry]
+name = "sashar-dev-api-ml"
+version = "0.1.0"
+description = "ML / time-series playground and LLM pipeline backend for sashar.dev"
+authors = ["Sasha Ruiz de Aguirre <radbruch.ag@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "app" }]
+
+[tool.poetry.dependencies]
+# Ubuntu 22.04 ships 3.10, 24.04 ships 3.12 — torch/lightgbm/spacy support this range.
+python = ">=3.10,<3.13"
+fastapi = "^0.111.0"
+uvicorn = { extras = ["standard"], version = "^0.30.1" }
+gunicorn = "^22.0.0"
+pydantic = "^2.7.4"
+numpy = "^1.26.4"
+pandas = "^2.2.2"
+scikit-learn = "^1.5.0"
+scipy = "^1.13.1"
+lightgbm = "^4.4.0"
+statsmodels = "^0.14.2"
+torch = { version = "^2.3.1", source = "pytorch-cpu" }
+hyperopt = "^0.2.7"
+# hyperopt 0.2.7 imports pkg_resources, which setuptools>=81 dropped — keep it available.
+setuptools = "<81"
+pygad = "^3.3.1"
+# LLM generation: Qwen2.5-0.5B-Instruct 4-bit GGUF on CPU via llama.cpp.
+llama-cpp-python = "^0.3.0"
+huggingface-hub = "^0.24.0"
+spacy = "^3.7.5"
+en_core_web_sm = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl" }
+# WordNet lexical DB — gives coherent noun clusters a real hypernym label
+# ("carnivore", "edible fruit"). The corpus data is fetched via nltk.download
+# (see README / apt_requirements) or bundled at deploy time.
+nltk = "^3.9.1"
+websockets = "^12.0"
+
+# CPU-only PyTorch wheels — avoids pulling CUDA on the GPU-less VM.
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[tool.poetry.group.dev.dependencies]
+httpx = "^0.27.0"
+pytest = "^8.2.2"
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
